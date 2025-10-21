@@ -1,0 +1,9 @@
+<svg width="177" height="24" viewBox="0 0 177 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Warnly logo dark">
+  <rect width="177" height="24" fill="transparent"/>
+  <text x="0" y="17.5"
+        font-family="Satoshi, Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+        font-weight="700"
+        font-size="14.2"
+        letter-spacing="0.15"
+        fill="#FFFFFF">Warnly</text>
+</svg>
