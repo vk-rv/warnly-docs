@@ -4,7 +4,7 @@
   "name": "Warnly",
   "colors": {
     "primary": "#000000",
-    "light": "#07C983",
+    "light": "#87CEEB",
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
@@ -72,13 +72,8 @@
       "anchors": [
         {
           "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
+          "href": "https://docs.warnly.io",
           "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
         }
       ]
     }
