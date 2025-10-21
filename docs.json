@@ -79,8 +79,8 @@
     }
   },
   "logo": {
-    "light": "/logo/warnly_light.svg",
-    "dark": "/logo/warnly_black.svg"
+    "light": "/logo/warnly_black.svg",
+    "dark": "/logo/warnly_light.svg"
   },
   "navbar": {
     "primary": {
