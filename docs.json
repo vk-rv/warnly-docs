@@ -18,6 +18,8 @@
             "pages": [
               "index",
               "quickstart",
+              "concepts",
+              "installation",
               "development"
             ]
           },
