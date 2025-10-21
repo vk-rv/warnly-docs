@@ -53,13 +53,18 @@
         {
           "anchor": "Website",
           "href": "https://warnly.io",
-          "icon": "book-open-cover"
+          "icon": "newspaper"
         },
         {
           "anchor": "Documentation",
           "href": "https://docs.warnly.io",
           "icon": "book-open-cover"
-        }
+        },
+         {
+            "anchor": "GitHub",
+            "href": "https://github.com/vk-rv/warnly",
+            "icon": "github"
+          }
       ]
     }
   },
