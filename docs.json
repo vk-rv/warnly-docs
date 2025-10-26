@@ -64,6 +64,11 @@
       "type": "button",
       "label": "Demo",
       "href": "https://demo.warnly.io"
+    },
+    "primary": {
+      "type": "button",
+      "label": "Demo by VPSDime",
+      "href": "https://vpsdime.com/"
     }
   },
   "footer": {
