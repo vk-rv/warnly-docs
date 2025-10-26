@@ -51,6 +51,11 @@
             "anchor": "GitHub",
             "href": "https://github.com/vk-rv/warnly",
             "icon": "github"
+          },
+        {
+            "anchor": "Demo by VPSDime",
+            "href": "https://vpsdime.com",
+            "icon": "github"
           }
       ]
     }
@@ -60,16 +65,12 @@
     "dark": "logo/wl.svg"
   },
   "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Demo",
-      "href": "https://demo.warnly.io"
-    },
-    "primary": {
-      "type": "button",
-      "label": "Demo by VPSDime",
-      "href": "https://vpsdime.com/"
-    }
+    "primary": 
+      {
+        "type": "button",
+        "label": "Demo",
+        "href": "https://demo.warnly.io"
+      }
   },
   "footer": {
     "socials": {
