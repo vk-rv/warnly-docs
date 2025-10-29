@@ -19,8 +19,7 @@
             "pages": [
               "index",
               "quickstart",
-              "concepts",
-              "development"
+              "concepts"
             ]
           },
           {
@@ -30,7 +29,7 @@
               "essentials/settings",
               "essentials/navigation"
             ]
-         }
+          }
         ]
       }
     ],
@@ -46,16 +45,16 @@
           "href": "https://docs.warnly.io",
           "icon": "book-open-cover"
         },
-         {
-            "anchor": "GitHub",
-            "href": "https://github.com/vk-rv/warnly",
-            "icon": "github"
-          },
         {
-            "anchor": "VPSDime",
-            "href": "https://vpsdime.com",
-            "icon": "v"
-          }
+          "anchor": "GitHub",
+          "href": "https://github.com/vk-rv/warnly",
+          "icon": "github"
+        },
+        {
+          "anchor": "VPSDime",
+          "href": "https://vpsdime.com",
+          "icon": "v"
+        }
       ]
     }
   },
@@ -64,12 +63,11 @@
     "dark": "logo/wl.svg"
   },
   "navbar": {
-    "primary": 
-      {
-        "type": "button",
-        "label": "Demo",
-        "href": "https://demo.warnly.io"
-      }
+    "primary": {
+      "type": "button",
+      "label": "Demo",
+      "href": "https://demo.warnly.io"
+    }
   },
   "footer": {
     "socials": {
