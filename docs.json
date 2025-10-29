@@ -27,7 +27,7 @@
             "icon": "gear",
             "pages": [
               "essentials/settings",
-              "essentials/navigation"
+              "essentials/oidc"
             ]
           }
         ]
@@ -39,11 +39,6 @@
           "anchor": "Website",
           "href": "https://warnly.io",
           "icon": "newspaper"
-        },
-        {
-          "anchor": "Documentation",
-          "href": "https://docs.warnly.io",
-          "icon": "book-open-cover"
         },
         {
           "anchor": "GitHub",

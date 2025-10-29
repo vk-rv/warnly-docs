@@ -1,0 +1,84 @@
+---
+title: "Authentication"
+description: "This document describes how to configure authentication mechanisms for Warnly."
+---
+
+## OIDC
+
+Warnly integrates with OIDC providers to authenticate users. Once configured, users can log in using their OIDC credentials, and Warnly will automatically create user accounts and manage access based on the configured settings.
+
+### Configuration
+
+To enable OIDC authentication, set the following environment variables:
+
+| Property              | Description                                                                 | Required |
+|-----------------------|-----------------------------------------------------------------------------|----------|
+| OIDC_PROVIDER_NAME   | Name of the OIDC provider (e.g., 'google', 'keycloak')                     | Yes      |
+| OIDC_ISSUER_URL      | OIDC issuer URL                                                             | Yes      |
+| OIDC_CLIENT_ID       | OIDC client ID                                                              | Yes      |
+| OIDC_CLIENT_SECRET   | OIDC client secret                                                          | Yes      |
+| OIDC_REDIRECT_ADDRESS| Public URL on which Warnly instance is reachable                            | Yes      |
+| OIDC_SCOPES          | Space-separated list of OIDC scopes (default: 'openid email profile')       | No       |
+| OIDC_EMAIL_MATCHES   | Space-separated list of email regex patterns for user filtering             | No       |
+| OIDC_USE_PKCE        | Enable PKCE for OIDC authentication flow (default: true)                    | No       |
+
+### Callback URL
+
+When configuring your OIDC provider, you need to set the callback URL to:
+
+```
+https://your-warnly-instance.com/oidc/{provider_name}/callback
+```
+
+Replace `{provider_name}` with the value of `OIDC_PROVIDER_NAME`.
+
+### Email Matches
+
+You can restrict access to specific users by configuring email patterns. Only users whose email addresses match the provided regular expressions will be allowed to authenticate.
+
+For example, to allow only users with `@yourcompany.com` emails:
+
+```bash
+OIDC_EMAIL_MATCHES=^.*@yourcompany\.com$
+```
+
+Multiple patterns can be separated by spaces.
+
+### Example: OIDC with Keycloak
+
+1. In your Keycloak admin console, create a new client
+2. Set the client type to "OpenID Connect"
+3. Configure the redirect URI: `https://your-warnly-instance.com/oidc/keycloak/callback`
+4. Enable "Standard flow" and "Direct access grants"
+5. Configure the following environment variables:
+
+```bash
+OIDC_PROVIDER_NAME=keycloak
+OIDC_ISSUER_URL=https://your-keycloak-instance.com/realms/your-realm
+OIDC_CLIENT_ID=your-keycloak-client-id
+OIDC_CLIENT_SECRET=your-keycloak-client-secret
+OIDC_REDIRECT_ADDRESS=https://your-warnly-instance.com
+OIDC_SCOPES="openid email profile"
+```
+
+### Troubleshooting
+
+#### Common Issues
+
+1. **Invalid redirect URI**: Ensure the callback URL in your OIDC provider matches the configured `OIDC_REDIRECT_ADDRESS` and provider name.
+
+2. **Email not matching**: Check that the `email` scope is requested and the user's email matches the `OIDC_EMAIL_MATCHES` patterns.
+
+3. **PKCE issues**: If your OIDC provider doesn't support PKCE, set `OIDC_USE_PKCE=false`.
+
+4. **HTTPS required**: Some providers require HTTPS for the redirect URI. Ensure your Warnly instance is accessible over HTTPS.
+
+#### Debugging
+
+- Check the Warnly logs for OIDC-related errors
+- Verify the OIDC issuer URL is accessible and returns valid OIDC configuration
+- Ensure the client ID and secret are correct
+- Test the OIDC flow manually using tools like [OIDC Debugger](https://oidcdebugger.com/)
+
+
+Most standard OIDC providers should work, but may require specific configuration adjustments.
