@@ -1,319 +1,136 @@
 ---
 title: "Global Settings"
-description: "Mintlify gives you complete control over the look and feel of your documentation using the docs.json file"
+description: "This document describes how to configure the Warnly server."
 ---
 
-Every Mintlify site needs a `docs.json` file with the core configuration settings. Learn more about the [properties](#properties) below.
+# Configuration
 
-## Properties
+Warnly is configured using environment variables.
 
-<ResponseField name="name" type="string" required>
-  Name of your project. Used for the global title.
+## Core Server Setup
 
-  Example: `mintlify`
-</ResponseField>
+### Server
 
-<ResponseField name="navigation" type="Navigation[]" required>
-  An array of groups with all the pages within that group
+Server configuration controls how Warnly listens for and serves HTTP and HTTPS connections.
 
-  <Expandable title="Navigation">
-    <ResponseField name="group" type="string">
-      The name of the group.
+| Property              | Description                                                                 | Default    | Required |
+|-----------------------|-----------------------------------------------------------------------------|------------|----------|
+| SERVER_HOST          | The host address on which to serve the Warnly application                   | localhost  | No       |
+| SERVER_PORT          | The HTTP port on which to serve the Warnly REST API and UI                  | 8080       | No       |
+| SCHEME               | The protocol to use (http or https)                                         | http       | No       |
+| CERT_FILE            | Path to the certificate file (required if SCHEME is https)                  |            | No       |
+| CERT_KEY             | Path to the certificate key file (required if SCHEME is https)              |            | No       |
+| CLOSE_TIMEOUT        | Timeout for graceful shutdown                                               | 5s         | No       |
+| PUBLIC_INGEST_URL    | Public URL for ingest endpoints (used for generating DSNs)                 |            | No       |
 
-      Example: `Settings`
-    </ResponseField>
-    <ResponseField name="pages" type="string[]">
-      The relative paths to the markdown files that will serve as pages.
+### Database
 
-      Example: `["customization", "page"]`
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+Database configuration defines how Warnly connects to MySQL for primary data storage.
 
-<ResponseField name="logo" type="string or object">
-  Path to logo image or object with path to "light" and "dark" mode logo images
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| MYSQL_DSN            | MySQL connection string with credentials and database name                 |         | Yes      |
 
-  <Expandable title="Logo">
-    <ResponseField name="light" type="string">
-      Path to the logo in light mode
-    </ResponseField>
-    <ResponseField name="dark" type="string">
-      Path to the logo in dark mode
-    </ResponseField>
-    <ResponseField name="href" type="string" default="/">
-      Where clicking on the logo links you to
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+Example DSN: `warnly:root@tcp(localhost:3306)/warnly?interpolateParams=true&parseTime=true&timeout=2s&loc=UTC`
 
-<ResponseField name="favicon" type="string">
-  Path to the favicon image
-</ResponseField>
+### Admin
 
-<ResponseField name="colors" type="Colors">
-  Hex color codes for your global theme
+Initial administrator account configuration.
 
-  <Expandable title="Colors">
-    <ResponseField name="primary" type="string" required>
-      The primary color. Used for most often for highlighted content, section headers, accents, in light mode
-    </ResponseField>
-    <ResponseField name="light" type="string">
-      The primary color for dark mode. Used for most often for highlighted content, section headers, accents, in dark mode
-    </ResponseField>
-    <ResponseField name="dark" type="string">
-      The primary color for important buttons
-    </ResponseField>
-    <ResponseField name="background" type="object">
-      The color of the background in both light and dark mode
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| ADMIN_EMAIL          | Email address for the initial admin user                                   |         | Yes      |
+| ADMIN_PASSWORD       | Password for the initial admin user                                        |         | Yes      |
 
-      <Expandable title="Object">
-        <ResponseField name="light" type="string" required>
-          The hex color code of the background in light mode
-        </ResponseField>
-        <ResponseField name="dark" type="string" required>
-          The hex color code of the background in dark mode
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+## Authentication
 
-<ResponseField name="topbarLinks" type="TopbarLink[]">
-  Array of `name`s and `url`s of links you want to include in the topbar
+### OIDC
 
-  <Expandable title="TopbarLink">
-    <ResponseField name="name" type="string">
-      The name of the button.
+OpenID Connect authentication provider configuration.
 
-      Example: `Contact us`
-    </ResponseField>
-    <ResponseField name="url" type="string">
-      The url once you click on the button. Example: `https://mintlify.com/docs`
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+| Property              | Description                                                                 | Default    | Required |
+|-----------------------|-----------------------------------------------------------------------------|------------|----------|
+| OIDC_PROVIDER_NAME   | Name of the OIDC provider (e.g., 'google', 'keycloak')                     |            | No       |
+| OIDC_ISSUER_URL      | OIDC issuer URL                                                             |            | No       |
+| OIDC_CLIENT_ID       | OIDC client ID                                                              |            | No       |
+| OIDC_CLIENT_SECRET   | OIDC client secret                                                          |            | No       |
+| OIDC_REDIRECT_ADDRESS| Public URL on which Warnly instance is reachable                            |            | No       |
+| OIDC_SCOPES          | Space-separated list of OIDC scopes                                         |            | No       |
+| OIDC_EMAIL_MATCHES   | Space-separated list of email regex patterns for user filtering             |            | No       |
+| OIDC_USE_PKCE        | Enable PKCE for OIDC authentication flow                                    | true       | No       |
 
-<ResponseField name="topbarCtaButton" type="Call to Action">
-  <Expandable title="Topbar Call to Action">
-    <ResponseField name="type" type={'"link" or "github"'} default="link">
-      Link shows a button. GitHub shows the repo information at the url provided including the number of GitHub stars.
-    </ResponseField>
-    <ResponseField name="url" type="string">
-      If `link`: What the button links to.
+### Sessions
 
-      If `github`: Link to the repository to load GitHub information from.
-    </ResponseField>
-    <ResponseField name="name" type="string">
-      Text inside the button. Only required if `type` is a `link`.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+Session management configuration.
 
-<ResponseField name="versions" type="string[]">
-  Array of version names. Only use this if you want to show different versions of docs with a dropdown in the navigation bar.
-</ResponseField>
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| SESSION_KEY          | Secret key for signing session cookies (32 bytes)                           |         | Yes      |
+| REMEMBER_SESSION_DAYS| Number of days to remember user sessions                                    | 30      | No       |
 
-<ResponseField name="anchors" type="Anchor[]">
-  An array of the anchors, includes the `icon`, `color`, and `url`.
+## Observability
 
-  <Expandable title="Anchor">
-    <ResponseField name="icon" type="string">
-      The [Font Awesome](https://fontawesome.com/search?q=heart) icon used to feature the anchor.
+### Logging
 
-      Example: `comments`
-    </ResponseField>
-    <ResponseField name="name" type="string">
-      The name of the anchor label.
+Logging configuration controls the format and destination of Warnly's application logs.
 
-      Example: `Community`
-    </ResponseField>
-    <ResponseField name="url" type="string">
-      The start of the URL that marks what pages go in the anchor. Generally, this is the name of the folder you put your pages in.
-    </ResponseField>
-    <ResponseField name="color" type="string">
-      The hex color of the anchor icon background. Can also be a gradient if you pass an object with the properties `from` and `to` that are each a hex color.
-    </ResponseField>
-    <ResponseField name="version" type="string">
-      Used if you want to hide an anchor until the correct docs version is selected.
-    </ResponseField>
-    <ResponseField name="isDefaultHidden" type="boolean" default="false">
-      Pass `true` if you want to hide the anchor until you directly link someone to docs inside it.
-    </ResponseField>
-    <ResponseField name="iconType" type="string" default="duotone">
-      One of: "brands", "duotone", "light", "sharp-solid", "solid", or "thin"
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| LOG_OUTPUT           | Where to output logs (stderr, stdout, or file path)                         | stderr  | No       |
+| LOG_TEXT             | Use text format instead of JSON                                             | false   | No       |
 
-<ResponseField name="topAnchor" type="Object">
-  Override the default configurations for the top-most anchor.
+### Tracing
 
-  <Expandable title="Object">
-    <ResponseField name="name" type="string" default="Documentation">
-      The name of the top-most anchor
-    </ResponseField>
-    <ResponseField name="icon" type="string" default="book-open">
-      Font Awesome icon.
-    </ResponseField>
-    <ResponseField name="iconType" type="string" default="duotone">
-      One of: "brands", "duotone", "light", "sharp-solid", "solid", or "thin"
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+OpenTelemetry tracing configuration.
 
-<ResponseField name="tabs" type="Tabs[]">
-  An array of navigational tabs.
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| TRACING_REPORTER_URI | OTLP gRPC endpoint for sending traces                                       |         | No       |
+| TRACING_SERVICE_NAME | Service name for traces                                                     | warnly  | No       |
+| TRACING_PROBABILITY  | Sampling probability for traces (0.0 to 1.0)                                | 1.0     | No       |
 
-  <Expandable title="Tabs">
-    <ResponseField name="name" type="string">
-      The name of the tab label.
-    </ResponseField>
-    <ResponseField name="url" type="string">
-      The start of the URL that marks what pages go in the tab. Generally, this is the name of the folder you put your pages in.
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+### Metrics
 
-<ResponseField name="api" type="API">
-  Configuration for API settings. Learn more about API pages at [API Components](/api-playground/demo).
+Prometheus metrics configuration.
 
-  <Expandable title="API">
-    <ResponseField name="baseUrl" type="string">
-      The base url for all API endpoints. If `baseUrl` is an array, it will enable for multiple base url options that the user can toggle.
-    </ResponseField>
-    <ResponseField name="auth" type="Auth">
-      <Expandable title="Auth">
-        <ResponseField name="method" type='"bearer" | "basic" | "key"'>
-          The authentication strategy used for all API endpoints.
-        </ResponseField>
-        <ResponseField name="name" type="string">
-          The name of the authentication parameter used in the API playground.
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| METRICS_ENABLED      | Enable Prometheus metrics endpoint                                          | false   | No       |
+| METRICS_PORT         | Port for metrics server                                                     | 8081    | No       |
+| METRICS_PATH         | Path for metrics endpoint                                                   | /metrics| No       |
 
-          If method is `basic`, the format should be `[usernameName]:[passwordName]`
-        </ResponseField>
-        <ResponseField name="inputPrefix" type="string">
-          The default value that's designed to be a prefix for the authentication input field.
+## Analytics
 
-          E.g. If an `inputPrefix` of `AuthKey` would inherit the default input result of the authentication field as `AuthKey`.
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
-    <ResponseField name="playground" type="Playground">
-      Configurations for the API playground
+### ClickHouse
 
-      <Expandable title="Playground">
-        <ResponseField name="mode" type='"show" | "simple" | "hide"' default="show">
-          Whether the playground is showing, hidden, or only displaying the endpoint with no added user interactivity `simple`
+ClickHouse configuration for analytics and event storage.
 
-          Learn more at the [playground guides](/api-playground/demo)
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
-    <ResponseField name="maintainOrder" type="boolean">
-      Enabling this flag ensures that key ordering in OpenAPI pages matches the key ordering defined in the OpenAPI file.
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| CLICKHOUSE_DSN       | ClickHouse connection string with credentials and database name            |         | Yes      |
 
-      <Warning>
-        This behavior will soon be enabled by default, at which point this field will be deprecated.
-      </Warning>
-    </ResponseField>
-  </Expandable>
-</ResponseField>
+Example DSN: `clickhouse://root:root@clickhouse:9000/warnly?dial_timeout=900ms&connection_open_strategy=in_order&compress=true&max_open_conns=55&max_idle_conns=50&conn_max_lifetime=5m&max_execution_time=10`
 
-<ResponseField name="openapi" type="string | string[]">
-  A string or an array of strings of URL(s) or relative path(s) pointing to your OpenAPI file.
+## Additional Settings
 
-  Examples:
+### Migration
 
-  <CodeGroup>
+Database migration settings.
 
-  ```json Absolute
-  "openapi": "https://example.com/openapi.json"
-  ```
+| Property              | Description                                                                 | Default | Required |
+|-----------------------|-----------------------------------------------------------------------------|---------|----------|
+| FORCE_MIGRATE        | Force database migrations to run on startup                                 | false   | No       |
 
-  
-  ```json Relative
-  "openapi": "/openapi.json"
-  ```
 
-  
-  ```json Multiple
-  "openapi": ["https://example.com/openapi1.json", "/openapi2.json", "/openapi3.json"]
-  ```
+## Environment Variable Override
 
-  </CodeGroup>
-</ResponseField>
+All configuration options can be overridden using environment variables. The naming convention follows the struct tags in the source code (uppercase with underscores replacing camelCase).
 
-<ResponseField name="footerSocials" type="FooterSocials">
-  An object of social media accounts where the key:property pair represents the social media platform and the account url.
+For example, to override the server port:
+```bash
+export SERVER_PORT=9090
+```
 
-  Example:
+## Configuration Validation
 
-  ```json
-  {
-    "x": "https://x.com/mintlify",
-    "website": "https://mintlify.com"
-  }
-  ```
-
-  <Expandable title="FooterSocials">
-    <ResponseField name="[key]" type="string">
-      One of the following values `website`, `facebook`, `x`, `discord`, `slack`, `github`, `linkedin`, `instagram`, `hacker-news`
-
-      Example: `x`
-    </ResponseField>
-    <ResponseField name="property" type="string">
-      The URL to the social platform.
-
-      Example: `https://x.com/mintlify`
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-<ResponseField name="feedback" type="Feedback">
-  Configurations to enable feedback buttons
-
-  <Expandable title="Feedback">
-    <ResponseField name="suggestEdit" type="boolean" default="false">
-      Enables a button to allow users to suggest edits via pull requests
-    </ResponseField>
-    <ResponseField name="raiseIssue" type="boolean" default="false">
-      Enables a button to allow users to raise an issue about the documentation
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-<ResponseField name="modeToggle" type="ModeToggle">
-  Customize the dark mode toggle.
-
-  <Expandable title="ModeToggle">
-    <ResponseField name="default" type={'"light" or "dark"'}>
-      Set if you always want to show light or dark mode for new users. When not set, we default to the same mode as the user's operating system.
-    </ResponseField>
-    <ResponseField name="isHidden" type="boolean" default="false">
-      Set to true to hide the dark/light mode toggle. You can combine `isHidden` with `default` to force your docs to only use light or dark mode. For example:
-
-      <CodeGroup>
-
-      ```json Only Dark Mode
-      "modeToggle": {
-        "default": "dark",
-        "isHidden": true
-      }
-      ```
-
-      
-      ```json Only Light Mode
-      "modeToggle": {
-        "default": "light",
-        "isHidden": true
-      }
-      ```
-
-      </CodeGroup>
-    </ResponseField>
-  </Expandable>
-</ResponseField>
-
-<ResponseField name="backgroundImage" type="string">
-  A background image to be displayed behind every page. See example with [Infisical](https://infisical.com/docs) and [FRPC](https://frpc.io).
-</ResponseField>
+Warnly validates configuration at startup. Required fields will cause the application to exit with an error if not provided. Optional fields use sensible defaults.
