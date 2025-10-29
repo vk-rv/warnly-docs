@@ -1,4 +1,51 @@
 ---
 title: "Concepts"
-description: "Description of your new file."
+description: "This document describes the basic concepts of Warnly."
 ---
+
+## Projects
+
+Projects are the primary organizational unit in Warnly. They allow you to group related error events and manage access control. Each project has its own API key for ingesting events, and you can assign teams and users to projects to control who can view and manage issues.
+
+Projects are global within a Warnly instance, but access is controlled by team membership.
+
+## Events
+
+Events are the basic unit in the Warnly ecosystem. An event represents a single error occurrence captured from your applications. Events contain detailed information about the error, including:
+
+- Error message and stack trace
+- Environment and release information
+- User and device context
+- Timestamp and unique identifiers
+
+Events are ingested via the Ingest API and are automatically grouped into issues based on similarity.
+
+## Issues
+
+Issues are collections of similar error events. Warnly automatically groups events that share the same error message, stack trace pattern, or other identifying characteristics. Each issue represents a unique problem in your application that needs attention.
+
+Issues have the following properties:
+
+- **Assignee**: Team member responsible for the issue
+- **Tags**: Custom labels for categorization
+
+## Users and Teams
+
+### Users
+
+Users are individuals who can access Warnly. Users can be authenticated via local accounts or external providers like OIDC.
+
+### Teams
+
+Teams allow you to organize users and control access to projects. When you assign a team to a project, all team members gain access to that project's events and issues.
+
+Team members can be assigned to issues for tracking responsibility and notifications.
+
+## Grouping
+
+Grouping is the process by which Warnly automatically categorizes incoming events into issues. The system uses several strategies:
+
+- **Fingerprinting**: Creating unique identifiers based on error characteristics
+- **Similarity matching**: Comparing stack traces, messages, and context
+
+Grouping ensures that related errors are collected under the same issue, reducing noise and making it easier to track and resolve problems.
